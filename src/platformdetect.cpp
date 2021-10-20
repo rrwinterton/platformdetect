@@ -4,22 +4,57 @@
 
 //includes
 #include <windows.h>
-#include <iostream>
+#include <dxgi.h>
 
 //cpuinfo and gpuinfo includes
+#include <vector>
+#include <iostream>
+#include <fstream>
+#include <string>
+
+#include "gpuid.h"
 #include "cpuinfo.h"
 #include "gpuinfo.h"
 
-using namespace std; //for cout
+using namespace std; //for cout debug only
 
 //main for platform detect
 int main(int argc, char *argv[])
 {
+    GPUId cGPUId;
     CPUInfo cCPUInfo;
     GPUInfo cGPUInfo;
+    int numberOfGPUs;
+    std::vector<uint32_t> PCIIds;
+    std::vector<uint32_t> foundGen11PCIIds;
+    int numIds;
+    uint32_t numGen11Gfx;
 
+    //TODO: rrw this code needs to be tested for multiple gpu platforms
+    //begin code to be used as sample code
+    std::cout << "Gen Detection" << endl;
+    cGPUId.readPCIFile("11", numIds, PCIIds);
+    if (0 == PCIIds.size()) {
+        cout << "No PCI ID file." << endl;
+    }
+    numberOfGPUs = cGPUInfo.NumGPUs();
+    cGPUId.findDeviceIds(PCIIds, foundGen11PCIIds);
+
+    numGen11Gfx = (uint32_t) foundGen11PCIIds.size();
+    if (0 != foundGen11PCIIds.size()) {
+        numIds = 1;
+        cout << "Using Gen 11 Graphics" << endl;
+        for (auto itr = foundGen11PCIIds.begin(); itr < foundGen11PCIIds.end(); itr++) {
+            cout << numIds << ":  " << std::hex << *itr << endl;
+        }
+        cout << endl;
+    }
+    //end code to be used as sample code
+
+    //debugging unit test information
     //print out cpu information
-    cout << "*** CPU Info ***" << endl;
+    cout << "*** Below Information is to be used for debug only ***" << endl;
+    cout << "(CPU Info)" << endl;
     cout << "CPU vendor: " << cCPUInfo.vendor() << endl;
     cout << "CPU string: " << cCPUInfo.model() << endl;
     cout << "number of cores: " << cCPUInfo.cores() << endl;
@@ -35,7 +70,7 @@ int main(int argc, char *argv[])
     cout << endl;
 
     //print out gpu information
-    cout << "*** GPU Info ***" << endl;
+    cout << "(GPU Info)" << endl;
     //TODO: haven't tested multiple gpu's yet
     if (1 == cGPUInfo.NumGPUs())
     {
@@ -45,6 +80,7 @@ int main(int argc, char *argv[])
         cout << "Number of gpus: " << cGPUInfo.NumGPUs() << endl;
         //        cout << "Driver Name " << cGPUInfo.DriverNames[0] << endl;
         cout << "GPU Name: " << cGPUInfo.GPUName() << endl;
+        cout << "PNP Device ID: " << cGPUInfo.PNPDeviceID() << endl;
         cout << "GPU Description: " << cGPUInfo.GPUDescription() << endl;
         cout << "GPU InstalledDisplayDrivers: " << cGPUInfo.InstalledDisplayDrivers() << endl;
         cout << "GPU DeviceId: " << cGPUInfo.DeviceId() << endl;

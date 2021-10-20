@@ -24,12 +24,18 @@
     <ClCompile Include="src\gpuinfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\gpuid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\cpuinfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\gpuinfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gpuid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

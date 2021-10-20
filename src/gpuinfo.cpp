@@ -1,6 +1,7 @@
 #include <comdef.h>
 #include <Wbemidl.h>
 #include <tchar.h>
+#include <iostream>
 
 #define _WIN32_DCOM
 #pragma comment(lib, "wbemuuid.lib")
@@ -110,6 +111,15 @@ GPUInfo::GPUInfo()
             mGPUName = _bstr_t(vtProp.bstrVal, false);
         }
         VariantClear(&vtProp);
+
+        vtProp = { 0 };
+        hr = pclsObj->Get(L"PNPDeviceID", 0, &vtProp, 0, 0);
+        if (vtProp.bstrVal != nullptr)
+        {
+            mPNPDeviceID = _bstr_t(vtProp.bstrVal, false);
+        }
+        VariantClear(&vtProp);
+
 
         //get InstalledDisplayDrivers property
         hr = pclsObj->Get(L"InstalledDisplayDrivers", 0, &vtProp, 0, 0);

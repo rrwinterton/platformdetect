@@ -15,7 +15,7 @@
 #define GPUINFO_FAILED_RegOpenKey3 -9
 #define GPUINFO_FAILED_RegOpenKey4 -10
 
-//CPUInfo
+//GPUInfo
 class GPUInfo
 {
 public:
@@ -24,6 +24,7 @@ public:
 
     const uint32_t NumGPUs() const { return mNumGPUs; }
     const std::string GPUName() const { return mGPUName; }
+    const std::string PNPDeviceID() const { return mPNPDeviceID; }
     const std::string GPUDescription() const { return mGPUDescription; }
     const std::string InstalledDisplayDrivers() const { return mInstalledDisplayDrivers; }
     const std::string DeviceId() const { return mDeviceId; }
@@ -35,6 +36,7 @@ private:
     std::string mDriverName[MAX_GPUS];
     int getNumGPUs(DWORD &mNumGPUs, std::string chDriverName[]);
     std::string mGPUName;
+    std::string mPNPDeviceID;
     std::string mGPUDescription;
     std::string mInstalledDisplayDrivers;
     std::string mDeviceId;

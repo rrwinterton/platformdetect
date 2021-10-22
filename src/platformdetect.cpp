@@ -26,29 +26,61 @@ int main(int argc, char *argv[])
     GPUInfo cGPUInfo;
     int numberOfGPUs;
     std::vector<uint32_t> PCIIds;
-    std::vector<uint32_t> foundGen11PCIIds;
+    std::vector<uint32_t> foundGenPCIIds;
     int numIds;
-    uint32_t numGen11Gfx;
+    uint32_t numGenGfx;
 
     //TODO: rrw this code needs to be tested for multiple gpu platforms
     //begin code to be used as sample code
-    std::cout << "Gen Detection" << endl;
+    std::cout << "Gen 10 Detection" << endl;
+    cGPUId.readPCIFile("10", numIds, PCIIds);
+    if (0 == PCIIds.size()) {
+        cout << "No PCI ID file." << endl;
+    }
+    else {
+        numberOfGPUs = cGPUInfo.NumGPUs();
+        cGPUId.findDeviceIds(PCIIds, foundGenPCIIds);
+    }
+
+    numGenGfx = (uint32_t) foundGenPCIIds.size();
+    if (0 != foundGenPCIIds.size()) {
+        numIds = 1;
+        cout << "Using Gen 10 Graphics" << endl;
+        for (auto itr = foundGenPCIIds.begin(); itr < foundGenPCIIds.end(); itr++) {
+            cout << numIds << ":  " << std::hex << *itr << endl;
+        }
+        cout << endl;
+    }
+    else {
+        cout << "No Gen 10 Graphics Detected" << endl;
+    }
+    PCIIds.clear();
+    foundGenPCIIds.clear();
+    
+    std::cout << "Gen 11 Detection" << endl;
     cGPUId.readPCIFile("11", numIds, PCIIds);
     if (0 == PCIIds.size()) {
         cout << "No PCI ID file." << endl;
     }
     numberOfGPUs = cGPUInfo.NumGPUs();
-    cGPUId.findDeviceIds(PCIIds, foundGen11PCIIds);
+    cGPUId.findDeviceIds(PCIIds, foundGenPCIIds);
 
-    numGen11Gfx = (uint32_t) foundGen11PCIIds.size();
-    if (0 != foundGen11PCIIds.size()) {
+    numGenGfx = (uint32_t) foundGenPCIIds.size();
+    if (0 != foundGenPCIIds.size()) {
         numIds = 1;
         cout << "Using Gen 11 Graphics" << endl;
-        for (auto itr = foundGen11PCIIds.begin(); itr < foundGen11PCIIds.end(); itr++) {
+        for (auto itr = foundGenPCIIds.begin(); itr < foundGenPCIIds.end(); itr++) {
             cout << numIds << ":  " << std::hex << *itr << endl;
         }
         cout << endl;
     }
+    else {
+        cout << "No Gen 11 Graphics Detected" << endl;
+    }
+
+    PCIIds.clear();
+    foundGenPCIIds.clear();
+
     //end code to be used as sample code
 
     //debugging unit test information
